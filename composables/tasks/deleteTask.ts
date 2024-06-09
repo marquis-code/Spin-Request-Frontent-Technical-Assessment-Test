@@ -1,41 +1,40 @@
-import { tasksApiFactory } from "@/apiFactory/task";
+// composables/tasks/useDeleteTask.ts
+import { useTaskStore } from '@/store/taskStore';
+import { ref } from 'vue';
 import { useNuxtApp } from '#app';
-import Swal from "sweetalert2";
-import { useFetchTasksList } from '@/composables/tasks/fetchTasks'
-const { fetchTasks } = useFetchTasksList()
+import Swal from 'sweetalert2';
 
 export const useDeleteTask = () => {
+  const taskStore = useTaskStore();
+  const { $toast } = useNuxtApp();
   const loading = ref(false);
-  const deleteTask = async (task_id: number | string) => {
-    console.log(task_id, 'task is here')
+
+  const deleteTask = async (taskId: number) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes delete, Task.",
-      cancelButtonText: "Nah, Just kidding",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     }).then(async (result) => {
-      if (result.value) {
-        loading.value = true;
+      if (result.isConfirmed) {
+        taskStore.loading = true;
         try {
-          const response = await tasksApiFactory.deleteTask(task_id);
-          fetchTasks()
-          return response;
+          await taskStore.deleteTask(taskId);
+          $toast.success('Task was deleted successfully.', {
+            autoClose: 5000,
+            dangerouslyHTMLString: true,
+          });
         } catch (error: any) {
-          const { $toast } = useNuxtApp();
           $toast.error(error.message, {
             autoClose: 5000,
             dangerouslyHTMLString: true,
           });
-          return error;
         } finally {
-          loading.value = false;
+          taskStore.loading = false;
         }
-      } else {
-        Swal.fire("Cancelled", "Action was cancelled", "info");
       }
     });
   };

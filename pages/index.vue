@@ -10,8 +10,8 @@
           </button>
         </div>
         <div class="card-body">
-          <TaskTableList v-if="!loading && tasksList.length" :tasks="tasksList" :loading="loading" />
-          <div v-else-if="loading && !tasksList.length">
+          <TaskTableList v-if="!loading && tasks.length" :tasks="tasks" :loading="loading" />
+          <div v-else-if="loading && !tasks.length">
             <CoreSpinner />
           </div>
           <div v-else class="d-flex justify-content-center flex-column">
@@ -25,8 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { useFetchTasksList } from '@/composables/tasks/fetchTasks'
-const { fetchTasks, tasksList, loading } = useFetchTasksList()
+import { useTaskStore } from '@/store/taskStore';
+import { storeToRefs } from 'pinia';
+
+const taskStore = useTaskStore();
+const { tasks, loading } = storeToRefs(taskStore);
+const { fetchTasks } = taskStore;
+
+fetchTasks();
 const router = useRouter()
-fetchTasks()
 </script>

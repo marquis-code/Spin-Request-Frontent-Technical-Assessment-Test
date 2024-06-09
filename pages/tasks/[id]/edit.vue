@@ -1,13 +1,13 @@
 <template>
   <main class="row">
     <div class="col-md-6" >
-      <div class="card w-50">
+      <div class="card">
         <div class="card-header">
           Update Task Details
         </div>
         <div class="card-body">
-          <FormsEditTask v-if="!fetchingTaskDetails && Object.keys(task).length" :task="task" />
-          <div v-else-if="fetchingTaskDetails && !Object.keys(task).length">
+          <FormsEditTask v-if="!loading && task" :task="task" />
+          <div v-else-if="loading && !task">
             <CoreSpinner />
           </div>
           <div v-else class="d-flex justify-content-center flex-column">
@@ -20,16 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import { useFetchTaskById } from '@/composables/tasks/fetchTaskById'
-import { useUpdateTask } from '@/composables/tasks/updateTask'
-const { fetchTaskById, task, loading: fetchingTaskDetails } = useFetchTaskById()
-const { updateTask, loading } = useUpdateTask()
-fetchTaskById()
+import { useTaskStore } from '@/store/taskStore';
+import { storeToRefs } from 'pinia';
+import { useRoute } from 'vue-router';
 
-const handleTaskUpdate = () => {
-  if (task.value) {
-    updateTask(task.value)
-  }
-}
+const taskStore = useTaskStore();
+const { currentTask: task, loading } = storeToRefs(taskStore);
+const { fetchTaskById } = taskStore;
+const route = useRoute();
 
+fetchTaskById(route.params.id)
 </script>

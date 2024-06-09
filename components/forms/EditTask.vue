@@ -25,11 +25,15 @@
 </template>
 
 <script setup lang="ts">
-// import { useFetchTaskById } from '../../composables/tasks/fetchTaskById'
-import { useUpdateTask } from '@/composables/tasks/updateTask'
-// const { fetchTaskById, task, loading: fetchingTaskDetails } = useFetchTaskById()
-const { updateTask, loading } = useUpdateTask()
-// fetchTaskById()
+import { useTaskStore } from '@/store/taskStore';
+import { storeToRefs } from 'pinia';
+
+const taskStore = useTaskStore();
+const { loading } = storeToRefs(taskStore);
+const { updateTask } = taskStore
+const router = useRouter()
+
+
 const props = withDefaults(defineProps<{
   task: Record<string, any>
 }>(), {
@@ -38,7 +42,9 @@ const props = withDefaults(defineProps<{
 
 const handleTaskUpdate = () => {
   if (props.task) {
-    updateTask(props.task)
+    updateTask(props.task).then(() => {
+      router.push('/')
+    })
   }
 }
 </script>

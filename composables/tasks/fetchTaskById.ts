@@ -1,26 +1,26 @@
-import { tasksApiFactory } from "@/apiFactory/task";
-import { useNuxtApp } from '#app';
+// composables/tasks/useFetchTaskById.ts
+import { useTaskStore } from '@/store/taskStore';
+import { useRoute, useNuxtApp } from '#app';
 
 export const useFetchTaskById = () => {
-  const task = ref([]);
-  const task_id = useRoute().params.id as number | string;
-  const loading = ref(false);
+  const taskStore = useTaskStore();
+  const route = useRoute();
+  const { $toast } = useNuxtApp();
+
   const fetchTaskById = async () => {
-    loading.value = true;
+    const taskId = route.params.id as number;
+    taskStore.loading = true;
     try {
-      const response = await tasksApiFactory.getTaskById(task_id);
-     task.value = response.data;
+      await taskStore.fetchTaskById(taskId);
     } catch (error: any) {
-      const { $toast } = useNuxtApp();
       $toast.error(error.message, {
         autoClose: 5000,
         dangerouslyHTMLString: true,
       });
-      return error;
     } finally {
-      loading.value = false;
+      taskStore.loading = false;
     }
   };
 
-  return { fetchTaskById, task, loading };
+  return { fetchTaskById, task: taskStore.currentTask, loading: taskStore.loading };
 };

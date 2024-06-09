@@ -1,3 +1,4 @@
+import reducer from './dev-server-log-reducer';
 export default defineNuxtConfig({
   css: [
     "assets/scss/themes/dark/app-dark.scss",

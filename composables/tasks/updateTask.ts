@@ -1,38 +1,33 @@
-import { tasksApiFactory } from "@/apiFactory/task";
-import type { UpdateTaskInterface } from "@/interfaces/taskInterface";
-import { useFetchTasksList } from '@/composables/tasks/fetchTasks'
-const { fetchTasks } = useFetchTasksList()
-import { useNuxtApp } from '#app';
-const route = useRoute()
-const router = useRouter()
-
+// composables/tasks/useUpdateTask.ts
+import { useTaskStore } from '@/store/taskStore';
+import { useRoute, useRouter, useNuxtApp } from '#app';
+import type { UpdateTaskInterface } from '@/interfaces/taskInterface';
 
 export const useUpdateTask = () => {
-  const task_id = route.params.id as  number | string
-  const loading = ref(false);
+  const taskStore = useTaskStore();
+  const route = useRoute();
+  const router = useRouter();
+  const { $toast } = useNuxtApp();
+
   const updateTask = async (taskUpdate: UpdateTaskInterface) => {
-    loading.value = true;
+    const taskId = route.params.id as number;
+    taskStore.loading = true;
     try {
-      const payload = {
-        title: taskUpdate.title ?? '',
-        description:  taskUpdate.description ?? '',
-        isCompleted:  taskUpdate.isCompleted ?? false
-      }
-      const response = await tasksApiFactory.updateTask(task_id, payload);
-      router.push('/tasks')
-      fetchTasks()
-      return response;
+      await taskStore.updateTask({ ...taskUpdate, id: taskId });
+      $toast.success('Task was updated successfully.', {
+        autoClose: 5000,
+        dangerouslyHTMLString: true,
+      });
+      router.push('/tasks');
     } catch (error: any) {
-      const { $toast } = useNuxtApp();
       $toast.error(error.message, {
         autoClose: 5000,
         dangerouslyHTMLString: true,
       });
-      return error;
     } finally {
-      loading.value = false;
+      taskStore.loading = false;
     }
   };
 
-  return { updateTask, loading };
+  return { updateTask, loading: taskStore.loading };
 };

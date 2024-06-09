@@ -15,7 +15,7 @@
           <textarea v-model="payload.description" class="form-control no-resize" id="description" rows="3"></textarea>
         </div>
         <div class="w-auto">
-          <button :disabled="loading || !isFormEmpty" :class="{ 'disabled-btn': loading || !isFormEmpty }"
+          <button :disabled="loading || isFormEmpty" :class="{ 'disabled-btn': loading || isFormEmpty }"
             class="w-100 mt-5 mb-2 btn btn-primary">
             {{ loading ? 'processing...' : 'Submit' }}
           </button>
@@ -28,10 +28,27 @@
 
 
 <script setup lang="ts">
-import { useCreateTask } from '@/composables/tasks/createTask'
-const { createTask, payload, loading, isFormEmpty } = useCreateTask()
+import { useTaskStore } from '@/store/taskStore';
+import { storeToRefs } from 'pinia';
+const router = useRouter()
+
+const taskStore = useTaskStore();
+const { loading } = storeToRefs(taskStore);
+const { createTask, } = taskStore;
+
+const payload = ref({
+  title: '',
+  description: '',
+  isCompleted: false,
+});
+
+// Create computed property for form validation
+const isFormEmpty = computed(() => !payload.value.title || !payload.value.description);
+
 const handleCreateTask = () => {
-  createTask()
+  createTask(payload.value).then(() => {
+    router.push('/')
+  })
 }
 </script>
 

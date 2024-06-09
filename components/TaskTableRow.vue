@@ -37,8 +37,11 @@
 
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue';
-import { useDeleteTask } from '@/composables/tasks/deleteTask'
-const { deleteTask, loading } = useDeleteTask()
+import { useTaskStore } from '@/store/taskStore';
+
+const taskStore = useTaskStore();
+const { deleteTask } = taskStore
+
 const router = useRouter()
 
 const viewTaskDetails = (id: Record<string, any>) => {
@@ -58,4 +61,5 @@ const props = withDefaults(defineProps<{
 }>(), {
   task: {}
 });
+
 </script>

@@ -1,45 +1,36 @@
-import { tasksApiFactory } from "@/apiFactory/task";
-import type { TaskInterface } from "@/interfaces/taskInterface";
-import { useNuxtApp } from "#app";
-import { useFetchTasksList } from "../tasks/fetchTasks";
-const { fetchTasks } = useFetchTasksList();
+// composables/tasks/useCreateTask.ts
+import { useTaskStore } from '@/store/taskStore';
+import { ref, computed } from 'vue';
+import { useNuxtApp } from '#app';
 
 export const useCreateTask = () => {
-  const loading = ref(false);
-  const payload = ref<TaskInterface>({
-    title: "",
-    description: "",
+  const taskStore = useTaskStore();
+  const { $toast } = useNuxtApp();
+  const payload = ref({
+    title: '',
+    description: '',
     isCompleted: false,
   });
+
   const createTask = async () => {
-    const { $toast } = useNuxtApp();
-    loading.value = true;
+    taskStore.loading = true;
     try {
-      const response = await tasksApiFactory.createTask(payload.value);
-      $toast.success('Hurray!!!. Task was created successfully.', {
+      await taskStore.createTask(payload.value);
+      $toast.success('Task was created successfully.', {
         autoClose: 5000,
         dangerouslyHTMLString: true,
       });
-      fetchTasks();
-      return response;
     } catch (error: any) {
       $toast.error(error.message, {
         autoClose: 5000,
         dangerouslyHTMLString: true,
       });
-      return error;
     } finally {
-      loading.value = false;
+      taskStore.loading = false;
     }
   };
 
-  const isFormEmpty = computed(() => {
-    return (
-      payload.value.title &&
-      payload.value.description &&
-      payload.value.isCompleted
-    );
-  });
+  const isFormEmpty = computed(() => !payload.value.title || !payload.value.description);
 
-  return { createTask, payload, loading, isFormEmpty };
+  return { createTask, payload, isFormEmpty };
 };

@@ -6,8 +6,8 @@
           Task Details
         </div>
         <div class="card-body">
-          <FormsTaskDetails v-if="!loading && Object.keys(task).length" :task="task" />
-          <div v-else-if="loading && !Object.keys(task).length">
+          <FormsTaskDetails v-if="task" :task="task" />
+          <div v-else-if="loading">
             <CoreSpinner />
           </div>
           <div v-else class="d-flex justify-content-center flex-column">
@@ -20,8 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import { useFetchTaskById } from '@/composables/tasks/fetchTaskById'
-const { fetchTaskById, task, loading } = useFetchTaskById()
+import { useTaskStore } from '@/store/taskStore';
+import { storeToRefs } from 'pinia';
+import { useRoute } from 'vue-router';
 
-fetchTaskById()
+const taskStore = useTaskStore();
+const { currentTask: task, loading } = storeToRefs(taskStore);
+const { fetchTaskById } = taskStore;
+const route = useRoute();
+
+fetchTaskById(route.params.id)
 </script>

@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <TaskTableRow v-for="task in tasks" :key="task.id" :task="task" />
+        <TaskTableRow v-for="(task, index) in tasks" :key="index" :task="task" />
       </tbody>
     </table>
   </div>
