@@ -81,10 +81,9 @@ watch(() => store.isSidebarActive, (isSidebarActive) => {
       <div class="sidebar-header">
         <div class="d-flex justify-content-between">
           <div class="logo">
-            <nuxt-link to="/"><img src="~/assets/images/logo/logo.png" alt="Logo"></nuxt-link>
+            <nuxt-link to="/" class="text-sm-center small">SpinRequest</nuxt-link>
           </div>
-          <Dark />
-          <div class="sidebar-toggler x">
+          <div class="sidebar-toggler x mt-4">
             <a href="#" class="sidebar-hide d-xl-none d-block" @click="store.toggleSidebar">
               <i class="bi bi-x bi-middle"></i>
             </a>

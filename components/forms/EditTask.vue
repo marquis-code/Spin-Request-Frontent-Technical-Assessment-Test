@@ -9,12 +9,11 @@
         <label for="description" class="form-label">Description</label>
         <textarea v-model="task.description" class="form-control no-resize" id="description" rows="3"></textarea>
       </div>
-      <select v-model="task.completionStatus" class="form-select" aria-label="Default select example">
+      <select v-model="task.isCompleted" class="form-select" aria-label="Default select example">
         <label for="description" class="form-label">Completion Status</label>
         <option selected>select completion status</option>
-        <option value="pending">Pending</option>
-        <option value="progress">Progress</option>
-        <option value="completed">Completed</option>
+        <option value="false">Not Completed</option>
+        <option value="true">Completed</option>
       </select>
       <div class="w-auto">
         <button :disabled="loading" :class="{ 'disabled-btn': loading }" class="w-100 mt-5 mb-2 btn btn-primary">

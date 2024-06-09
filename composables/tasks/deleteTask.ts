@@ -1,7 +1,7 @@
-import { tasksApiFactory } from "../../apiFactory/task";
+import { tasksApiFactory } from "@/apiFactory/task";
 import { useNuxtApp } from '#app';
 import Swal from "sweetalert2";
-import { useFetchTasksList } from '../tasks/fetchTasks'
+import { useFetchTasksList } from '@/composables/tasks/fetchTasks'
 const { fetchTasks } = useFetchTasksList()
 
 export const useDeleteTask = () => {

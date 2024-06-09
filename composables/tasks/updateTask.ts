@@ -16,7 +16,7 @@ export const useUpdateTask = () => {
       const payload = {
         title: taskUpdate.title ?? '',
         description:  taskUpdate.description ?? '',
-        completionStatus:  taskUpdate.completionStatus ?? ''
+        isCompleted:  taskUpdate.isCompleted ?? false
       }
       const response = await tasksApiFactory.updateTask(task_id, payload);
       router.push('/tasks')

@@ -21,7 +21,7 @@ type Task = {
   id: string | number;
   title: string;
   description: string;
-  completionStatus: "pending" | "progress" | "completed";
+  isCompleted: boolean
 };
 
 const props = withDefaults(defineProps<{

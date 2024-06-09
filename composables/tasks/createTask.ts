@@ -9,7 +9,7 @@ export const useCreateTask = () => {
   const payload = ref<TaskInterface>({
     title: "",
     description: "",
-    completionStatus: "pending",
+    isCompleted: false,
   });
   const createTask = async () => {
     const { $toast } = useNuxtApp();
@@ -37,7 +37,7 @@ export const useCreateTask = () => {
     return (
       payload.value.title &&
       payload.value.description &&
-      payload.value.completionStatus
+      payload.value.isCompleted
     );
   });
 

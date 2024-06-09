@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h5 class="card-title">{{ task.title || 'Nil' }}</h5>
-    <p class="card-text">{{ task.description || 'Nil' }}</p>
+    <h5 class="card-title my-4">{{ task.title || 'Nil' }}</h5>
+    <p class="card-text my-4">{{ task.description || 'Nil' }}</p>
     <div>
       <span
-        :class="[task.completionStatus === 'pending' ? 'text-bg-secondary' : task.completionStatus === 'completed' ? 'text-bg-success' : task.completionStatus === 'progress' ? 'text-bg-primary' : '']"
+        :class="[!task.isCompleted ? 'text-bg-secondary' : 'text-bg-success']"
         class="badge rounded-pill text-bg-primary">
-        {{ task.completionStatus === 'completed' ? 'Completed' : task.completionStatus === 'pending' ? 'Pending' :
-    task.completionStatus === 'progress' ? 'Progress' : 'Nil' }}
+        {{ task.isCompleted ? 'Completed' : 'Not Completed' }}
       </span>
     </div>
   </div>

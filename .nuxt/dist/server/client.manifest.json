@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "/Users/marquis.abah/mazer-nuxt/node_modules/nuxt/dist/app/entry.js": {
+  "/Users/marquis.abah/spin-request-frontend-technical-assessment-test/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "/Users/marquis.abah/mazer-nuxt/node_modules/nuxt/dist/app/entry.js"
+    "file": "/Users/marquis.abah/spin-request-frontend-technical-assessment-test/node_modules/nuxt/dist/app/entry.js"
   }
 }
